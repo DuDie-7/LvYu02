@@ -128,29 +128,19 @@ const addMessage = async () => {
 
 // 删除留言
 const deleteMessage = async (id) => {
-  console.log('准备删除留言 ID:', id)
   try {
     await ElMessageBox.confirm('确定要删除这条留言吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
     })
-    console.log('用户确认删除，正在发送请求...')
-    const res = await api.get(`/delete/${id}`, {
+    await api.get(`/delete/${id}`, {
       headers: { 'Accept': 'application/json' }
     })
-    console.log('删除响应：', res)
     ElMessage.success('删除成功')
     await fetchMessages()
   } catch (err) {
-    console.error('删除出错：', err)
-    if (err === 'cancel') {
-      console.log('用户取消删除')
-    } else if (err.response) {
-      ElMessage.error(err.response?.data?.error || '删除失败，请重试')
-    } else {
-      ElMessage.error('删除请求失败，请检查网络')
-    }
+    // 用户取消
   }
 }
 
@@ -172,15 +162,22 @@ const togglePin = async (id) => {
   }
 }
 
-// 退出登录
+// 退出登录（修复版）
 const logout = async () => {
-  await api.get('/auth/logout')
-  localStorage.removeItem('isAdmin')
-  localStorage.removeItem('username')
-  localStorage.removeItem('userId')
-  router.push('/login')
+  try {
+    await api.get('/auth/logout')
+  } catch (err) {
+    // 即使请求失败，也清理本地存储并跳转
+    console.warn('退出登录请求失败，但已清理本地状态')
+  } finally {
+    localStorage.removeItem('isAdmin')
+    localStorage.removeItem('username')
+    localStorage.removeItem('userId')
+    router.push('/login')
+  }
 }
 
+// 页面加载
 onMounted(() => {
   // 从 localStorage 读取用户信息
   username.value = localStorage.getItem('username') || ''

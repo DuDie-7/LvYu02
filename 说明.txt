@@ -1,0 +1,31 @@
+文件清单
+文件路径	说明
+src/main.js	Vue 应用入口，引入 Element Plus（全局）、Vue Router，挂载 App
+src/App.vue	根组件，仅包含 <router-view />，用于路由渲染
+src/router/index.js	路由配置：/login（登录页）、/（留言板首页）、/edit/:id（编辑页），含路由守卫
+src/api/index.js	Axios 封装，baseURL 指向 Railway 后端（生产环境），withCredentials: true，headers: { 'Content-Type': 'application/json' }
+src/views/Login.vue	登录页面，登录成功后存储 username、userId、isAdmin 到 localStorage，支持错误提示
+src/views/Home.vue	留言板首页，包含：
+                        - 顶部导航（欢迎用户名、管理员标签、退出登录）
+                        - 发布留言表单（标题 + 内容）
+                        - 留言列表（显示标题、内容、作者、置顶标识 📌）
+                        - 操作按钮（编辑、删除、置顶/取消置顶）
+                        - 权限控制（编辑仅作者可见，删除作者/admin可见，置顶仅admin可见）
+src/views/Edit.vue	编辑留言页面，加载留言完整内容（标题 + 内容），仅作者本人可保存修改，含加载状态和错误提示
+public/	静态资源目录（favicon 等）
+index.html	HTML 入口文件
+package.json	项目依赖：vue、vue-router、axios、element-plus、vite
+vite.config.js	Vite 配置（开发代理、构建配置）
+.gitignore	忽略 node_modules、dist、.env.local 等
+
+主要功能亮点：
+- 前后端分离架构（Vue3 + Flask API）
+- 登录状态管理（localStorage 存储 username、userId、isAdmin）
+- 权限控制（管理员标签、编辑按钮、删除按钮、置顶按钮）
+- 置顶功能（📌 标识、置顶/取消置顶）
+- 响应式 UI（Element Plus 组件）
+- 路由守卫（未登录自动跳转登录页）
+- 跨域请求支持（withCredentials: true）
+
+部署地址：https://lv-yu02.vercel.app
+GitHub：https://github.com/DuDie-7/LvYu02

@@ -36,10 +36,11 @@ const handleLogin = async () => {
       username: username.value,
       password: password.value
     })
-    // 存储用户信息到 localStorage
+    // ===== 存储用户信息到 localStorage =====
     localStorage.setItem('username', response.data.username || '')
     localStorage.setItem('userId', response.data.user_id || 0)
     localStorage.setItem('isAdmin', response.data.is_admin || false)
+    // =====================================
     // 登录成功，跳转到首页
     router.push('/')
   } catch (err) {
